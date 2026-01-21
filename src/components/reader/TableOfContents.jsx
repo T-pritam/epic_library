@@ -38,11 +38,13 @@ export default function TableOfContents({
 
     return (
         <>
-            {/* Backdrop - only on mobile */}
-            <div
-                className="fixed inset-0 bg-black/30 z-40 lg:hidden"
-                onClick={onClose}
-            />
+            {/* Backdrop - only on mobile and only when open */}
+            {isOpen && (
+                <div
+                    className="fixed inset-0 bg-black/30 z-40 lg:hidden"
+                    onClick={onClose}
+                />
+            )}
 
             {/* Sidebar - overlay on all screens when open */}
             <div className={`fixed inset-y-0 left-0 z-50 w-80 max-w-[80vw] bg-white dark:bg-gray-800 shadow-xl border-r border-gray-200 dark:border-gray-700 flex flex-col h-full transition-transform ${

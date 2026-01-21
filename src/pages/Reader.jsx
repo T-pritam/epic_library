@@ -216,39 +216,48 @@ export default function Reader() {
         setIsBookmarkPanelOpen(false);
     }, [setIsBookmarkPanelOpen]);
 
-    // Dictionary - Text selection handling
+    // Handle text selection from EPUB
+    const handleTextSelection = useCallback(({ text, rect }) => {
+        console.log('Text selected from EPUB:', text);
+        if (text && rect) {
+            setDictPosition({
+                x: rect.left + (rect.width / 2) - 160,
+                y: rect.bottom + 10
+            });
+            lookup(text);
+            setShowDictionary(true);
+        }
+    }, [lookup]);
+
+    // Dictionary - Text selection handling (works in main document and iframes)
     useEffect(() => {
         const handleSelection = () => {
             const selection = window.getSelection();
-            const selectedText = selection?.toString().trim();
-
-            if (selectedText && selectedText.length > 1 && selectedText.length < 50) {
-                // Get selection position
-                const range = selection.getRangeAt(0);
-                const rect = range.getBoundingClientRect();
-
-                setDictPosition({
-                    x: rect.left + (rect.width / 2) - 160, // Center tooltip
-                    y: rect.bottom
-                });
-
-                lookup(selectedText);
-                setShowDictionary(true);
+            const text = selection?.toString?.().trim();
+            
+            if (text && text.length >= 2 && text.length <= 50 && selection.rangeCount > 0) {
+                try {
+                    const range = selection.getRangeAt(0);
+                    const rect = range.getBoundingClientRect();
+                    
+                    setDictPosition({
+                        x: rect.left + (rect.width / 2) - 160,
+                        y: rect.bottom + 10
+                    });
+                    lookup(text);
+                    setShowDictionary(true);
+                } catch (e) {
+                    console.warn('Error handling selection:', e);
+                }
             }
         };
 
-        // Listen for mouseup/touchend in the epub container
-        const container = containerRef.current;
-        if (container) {
-            container.addEventListener('mouseup', handleSelection);
-            container.addEventListener('touchend', handleSelection);
-        }
+        document.addEventListener('mouseup', handleSelection);
+        document.addEventListener('touchend', handleSelection);
 
         return () => {
-            if (container) {
-                container.removeEventListener('mouseup', handleSelection);
-                container.removeEventListener('touchend', handleSelection);
-            }
+            document.removeEventListener('mouseup', handleSelection);
+            document.removeEventListener('touchend', handleSelection);
         };
     }, [lookup]);
 
@@ -494,6 +503,7 @@ export default function Reader() {
                             onLocationChange={handleLocationChange}
                             onTocLoaded={handleTocLoaded}
                             onError={(err) => setError(err.message)}
+                            onTextSelection={handleTextSelection}
                         />
                     )}
                 </div>

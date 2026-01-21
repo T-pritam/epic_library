@@ -15,11 +15,13 @@ export default function SettingsPanel({ isOpen, onClose }) {
 
     return (
         <>
-            {/* Backdrop */}
-            <div
-                className="fixed inset-0 bg-black/20 z-30"
-                onClick={onClose}
-            />
+            {/* Backdrop - only when open */}
+            {isOpen && (
+                <div
+                    className="fixed inset-0 bg-black/20 z-30"
+                    onClick={onClose}
+                />
+            )}
 
             {/* Panel */}
             <div className="fixed inset-x-4 bottom-4 sm:inset-auto sm:right-4 sm:bottom-20 sm:w-80 z-40 bg-white dark:bg-gray-800 rounded-xl shadow-2xl border border-gray-200 dark:border-gray-700 animate-slide-up overflow-hidden">

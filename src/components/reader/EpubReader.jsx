@@ -8,7 +8,8 @@ export default function EpubReader({
     onLocationChange,
     onReady,
     onTocLoaded,
-    onError
+    onError,
+    onTextSelection
 }) {
     const containerRef = useRef(null);
     const bookRef = useRef(null);
@@ -296,9 +297,59 @@ export default function EpubReader({
                     }
                 });
 
-                // Handle rendering events for debugging
+                // Handle rendering events and attach selection listeners
                 rendition.on('rendered', (section) => {
                     console.log('✓ Section rendered:', section.href);
+                    
+                    // Attach selection listeners to the rendered iframe
+                    if (onTextSelection) {
+                        try {
+                            const iframes = document.querySelectorAll('.epub-container iframe');
+                            iframes.forEach((iframe, idx) => {
+                                try {
+                                    const iframeDoc = iframe.contentDocument || iframe.contentWindow?.document;
+                                    if (!iframeDoc) return;
+                                    
+                                    // Create handler that calls parent callback
+                                    const handleSelection = () => {
+                                        const selection = iframe.contentWindow?.getSelection?.();
+                                        const text = selection?.toString?.().trim();
+                                        
+                                        if (text && text.length >= 2 && text.length <= 50 && selection.rangeCount > 0) {
+                                            const range = selection.getRangeAt(0);
+                                            const iframeRect = range.getBoundingClientRect();
+                                            const iframePos = iframe.getBoundingClientRect();
+                                            
+                                            const rect = {
+                                                left: iframePos.left + iframeRect.left,
+                                                right: iframePos.left + iframeRect.right,
+                                                top: iframePos.top + iframeRect.top,
+                                                bottom: iframePos.top + iframeRect.bottom,
+                                                width: iframeRect.width
+                                            };
+                                            
+                                            onTextSelection({
+                                                text,
+                                                rect
+                                            });
+                                        }
+                                    };
+                                    
+                                    // Attach listeners
+                                    if (!iframe.__selectionHandlerAttached) {
+                                        iframeDoc.addEventListener('mouseup', handleSelection);
+                                        iframeDoc.addEventListener('touchend', handleSelection);
+                                        iframe.__selectionHandlerAttached = true;
+                                        console.log('✓ Selection listener attached to iframe', idx);
+                                    }
+                                } catch (e) {
+                                    console.warn('Error attaching to iframe:', e);
+                                }
+                            });
+                        } catch (e) {
+                            console.warn('Error setting up selection:', e);
+                        }
+                    }
                 });
 
             } catch (err) {

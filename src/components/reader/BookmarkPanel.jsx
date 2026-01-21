@@ -34,11 +34,13 @@ export default function BookmarkPanel({
 
     return (
         <>
-            {/* Backdrop */}
-            <div
-                className="fixed inset-0 bg-black/30 z-40 lg:hidden"
-                onClick={onClose}
-            />
+            {/* Backdrop - only when open */}
+            {isOpen && (
+                <div
+                    className="fixed inset-0 bg-black/30 z-40 lg:hidden"
+                    onClick={onClose}
+                />
+            )}
 
             {/* Panel */}
             <div className={`

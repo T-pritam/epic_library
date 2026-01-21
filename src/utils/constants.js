@@ -87,13 +87,13 @@ export const FONT_SIZES = {
         id: 'large',
         name: 'Large',
         size: '22px',
-        value: 120
+        value: 105
     },
     xlarge: {
         id: 'xlarge',
         name: 'Extra Large',
         size: '26px',
-        value: 140
+        value: 110
     }
 };
 
