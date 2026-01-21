@@ -1,0 +1,231 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Base styles */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f5f9;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+
+/* Dark mode scrollbar */
+.dark ::-webkit-scrollbar-track {
+  background: #1e293b;
+}
+
+.dark ::-webkit-scrollbar-thumb {
+  background: #475569;
+}
+
+.dark ::-webkit-scrollbar-thumb:hover {
+  background: #64748b;
+}
+
+/* Reader theme styles */
+.reader-theme-light {
+  background-color: #ffffff;
+  color: #1f2937;
+}
+
+.reader-theme-sepia {
+  background-color: #f4ecd8;
+  color: #5c4b37;
+}
+
+.reader-theme-dark {
+  background-color: #1f2937;
+  color: #f9fafb;
+}
+
+/* EPUB Reader styles */
+.epub-container {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow-y: auto;
+  overflow-x: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.epub-container iframe {
+  border: none !important;
+  width: 100% !important;
+  max-width: 100% !important;
+}
+
+.epub-container > div {
+  width: 100% !important;
+  max-width: 100% !important;
+  overflow: visible !important;
+}
+
+/* Reading fonts */
+.reading-font-serif {
+  font-family: Georgia, Cambria, 'Times New Roman', serif;
+}
+
+.reading-font-sans {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+.reading-font-mono {
+  font-family: 'Courier New', Courier, monospace;
+}
+
+/* Font sizes */
+.reading-size-small {
+  font-size: 14px;
+}
+
+.reading-size-medium {
+  font-size: 18px;
+}
+
+.reading-size-large {
+  font-size: 22px;
+}
+
+.reading-size-xlarge {
+  font-size: 26px;
+}
+
+/* Line heights */
+.reading-line-normal {
+  line-height: 1.5;
+}
+
+.reading-line-relaxed {
+  line-height: 1.75;
+}
+
+.reading-line-loose {
+  line-height: 2;
+}
+
+/* Hide scrollbar in full-screen reading mode */
+.fullscreen-reader::-webkit-scrollbar {
+  display: none;
+}
+
+.fullscreen-reader {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* Prevent zoom on double-tap (mobile) */
+.no-zoom {
+  touch-action: manipulation;
+}
+
+/* Loading animation */
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+.skeleton {
+  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+}
+
+.dark .skeleton {
+  background: linear-gradient(90deg, #374151 25%, #4b5563 50%, #374151 75%);
+  background-size: 200% 100%;
+}
+
+/* Book card hover effect */
+.book-card {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.book-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 24px -8px rgba(0, 0, 0, 0.15);
+}
+
+/* Glass effect */
+.glass {
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+.dark .glass {
+  background: rgba(30, 41, 59, 0.8);
+}
+
+/* Progress bar animation */
+.progress-bar {
+  transition: width 0.3s ease;
+}
+
+/* Tooltip animation */
+.tooltip-enter {
+  animation: fadeIn 0.2s ease-out;
+}
+
+/* Button hover effects */
+.btn-primary {
+  @apply bg-primary-500 hover:bg-primary-600 text-white font-medium py-2 px-4 rounded-lg transition-colors duration-200;
+}
+
+.btn-secondary {
+  @apply bg-gray-100 hover:bg-gray-200 text-gray-700 font-medium py-2 px-4 rounded-lg transition-colors duration-200;
+}
+
+.dark .btn-secondary {
+  @apply bg-gray-700 hover:bg-gray-600 text-gray-200;
+}
+
+/* Focus styles for accessibility */
+.focus-ring {
+  @apply focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2;
+}
+
+.dark .focus-ring {
+  @apply focus:ring-offset-gray-800;
+}
+
+/* Mobile touch feedback */
+@media (hover: none) {
+  .book-card:active {
+    transform: scale(0.98);
+  }
+}
